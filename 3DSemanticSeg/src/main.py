@@ -7,15 +7,19 @@ import pyarrow.parquet as pq
 
 import polars as pl
 import tensorflow.compat.v1 as tf
-
-tf.enable_eager_execution()
+import torch
 
 from waymo_open_dataset import dataset_pb2 as wod
 from waymo_open_dataset.utils import frame_utils
 
+from models import PlaceholderModel
+
 from utils import utils as utl
 from utils import utils_constants as utl_c
 from utils import utils_plotting as utl_p
+
+tf.enable_eager_execution()
+
 
 if __name__ == "__main__":
 
@@ -66,5 +70,11 @@ if __name__ == "__main__":
         seg_image_tensor, SEG_IMAGE_DIM_MAP, style_params={"cmap": "tab20"}
     )
 
-    # Baseline segmentation prediction (using only range images)
-    ## TODO (22 July 2024)
+    # Placeholder model (getting pipeline set up before iterating on model development)
+    model = PlaceholderModel()
+    range_image_tensor = torch.from_numpy(range_image_tensor.numpy())
+    output = model(range_image_tensor)
+    
+    # Generate protobuff submission file for validation set
+    
+    

@@ -7,3 +7,6 @@
 
 # Log files
 *.log
+
+# pycache files
+__pycache__/

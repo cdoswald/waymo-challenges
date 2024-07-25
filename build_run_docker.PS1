@@ -1,7 +1,7 @@
 # Config params
 $image_name = "waymo-od-image"
 $container_name = "waymo-od-container"
-$volume_local_path = "C:/Users/chris/GitHub/ML-sandbox/WaymoChallenges"
+$volume_local_path = "C:/Users/chris/GitHub/waymo-challenges"
 $volume_container_path = "/workspace/hostfiles"
 $port = 8000
 
