@@ -1,4 +1,12 @@
-"""General utility functions for Waymo Open Dataset challenges."""
+"""Waymo-provided utility functions for Waymo Open Dataset challenges.
+
+Note that all functions in this module are originally provided by Waymo
+and used without modification (e.g., functions provided in tutorials in the 
+waymo-open-dataset GitHub repository). 
+
+Functions that are based on Waymo utility functions but that have been modified 
+will be stored in utils.py (with source info).
+"""
 
 import os
 from typing import Dict, List, Optional, Tuple
@@ -13,56 +21,9 @@ tf.enable_eager_execution()
 from waymo_open_dataset import dataset_pb2 as wod
 
 
-def load_datafile(
-    datadir: str,
-    filename: str,
-) -> tf.data.Dataset:
-    """Load TFRecord dataset."""
-    return tf.data.TFRecordDataset(
-        os.path.join(datadir, filename),
-        compression_type="",
-    )
-
-
-def extract_frames_from_datafile(
-    dataset: tf.data.Dataset,
-    max_n_frames: Optional[int] = None,
-) -> List[wod.Frame]:
-    """Extract frames (sequences) from TFRecord dataset."""
-    # Validate max_n_frames arg
-    if max_n_frames is not None:
-        if (max_n_frames <= 0) or (not isinstance(max_n_frames, int)):
-            raise ValueError(
-                f"max_n_frames argument ({max_n_frames}) must be positive integer"
-            )
-    # Extract frames
-    frames = []
-    for data in dataset:
-        frame = wod.Frame()
-        frame.ParseFromString(bytearray(data.numpy()))
-        frames.append(frame)
-        if (max_n_frames is not None) and (len(frames) >= max_n_frames):
-            break
-    return frames
-
-
-def convert_range_image_to_tensor(
-    range_image: wod.MatrixFloat,
-) -> tf.Tensor:
-    """Convert range image from protocol buffer MatrixFloat object
-    to Tensorflow tensor object.
-
-    Based on https://github.com/waymo-research/waymo-open-dataset/blob/master/tutorial/tutorial.ipynb.
-    """
-    return tf.reshape(tf.convert_to_tensor(range_image.data), range_image.shape.dims)
-
-
 def convert_range_image_to_point_cloud_labels(
-    frame,
-    range_images,
-    segmentation_labels,
-    ri_index=0,
-) -> List:
+    frame, range_images, segmentation_labels, ri_index=0
+):
     """Convert segmentation labels from range images to point clouds.
 
     Args:

@@ -39,13 +39,13 @@ if __name__ == "__main__":
     # Import data files
     data_dir = "/workspace/hostfiles/3DSemanticSeg/data"
     data_files = os.listdir(data_dir)
-    data_file = data_files[0] # TODO: generalize
+    data_file = data_files[0]  # TODO: generalize
     dataset = utl.load_datafile(data_dir, data_file)
 
     # Extract frames
     frames = utl.extract_frames_from_datafile(dataset)
-    frame = frames[24] #TODO: generalize
-    
+    frame = frames[24]  # TODO: generalize
+
     # Parse range images
     range_images, camera_projections, seg_labels, range_image_top_pose = (
         frame_utils.parse_range_image_and_camera_projection(frame)
@@ -77,24 +77,22 @@ if __name__ == "__main__":
         range_images,
         camera_projections,
         range_image_top_pose,
-        ri_index=0, #First return
+        ri_index=0,  # First return
     )
     point_labels = utl_w.convert_range_image_to_point_cloud_labels(
         frame,
         range_images,
         seg_labels,
-        ri_index=0, #First return
+        ri_index=0,  # First return
     )
 
     points_all = np.concatenate(points, axis=0)
     point_labels_all = np.concatenate(point_labels, axis=0)
-    #TODO: plot point cloud
+    # TODO: plot point cloud
 
     # Placeholder model (getting pipeline set up before iterating on model development)
     model = PlaceholderModel()
     range_image_tensor = torch.from_numpy(range_image_tensor.numpy())
     output = model(range_image_tensor)
-    
+
     # Generate protobuff submission file for validation set
-    
-    
