@@ -17,6 +17,7 @@ from models import PlaceholderModel
 from utils import utils as utl
 from utils import utils_constants as utl_c
 from utils import utils_plotting as utl_p
+from utils import utils_waymo as utl_w
 
 tf.enable_eager_execution()
 
@@ -38,16 +39,16 @@ if __name__ == "__main__":
     # Import data files
     data_dir = "/workspace/hostfiles/3DSemanticSeg/data"
     data_files = os.listdir(data_dir)
-    dataset = utl.load_datafile(data_dir, data_files[0])  # TODO: generalize
+    data_file = data_files[0] # TODO: generalize
+    dataset = utl.load_datafile(data_dir, data_file)
 
     # Extract frames
     frames = utl.extract_frames_from_datafile(dataset)
-
+    frame = frames[24] #TODO: generalize
+    
     # Parse range images
     range_images, camera_projections, seg_labels, range_image_top_pose = (
-        frame_utils.parse_range_image_and_camera_projection(
-            frames[24]
-        )  # TODO: generalize
+        frame_utils.parse_range_image_and_camera_projection(frame)
     )
 
     # Convert range and segmentation images to tensors
@@ -69,6 +70,25 @@ if __name__ == "__main__":
     utl_p.plot_range_image_tensor(
         seg_image_tensor, SEG_IMAGE_DIM_MAP, style_params={"cmap": "tab20"}
     )
+
+    # Plot example point cloud
+    points, cp_points = frame_utils.convert_range_image_to_point_cloud(
+        frame,
+        range_images,
+        camera_projections,
+        range_image_top_pose,
+        ri_index=0, #First return
+    )
+    point_labels = utl_w.convert_range_image_to_point_cloud_labels(
+        frame,
+        range_images,
+        seg_labels,
+        ri_index=0, #First return
+    )
+
+    points_all = np.concatenate(points, axis=0)
+    point_labels_all = np.concatenate(point_labels, axis=0)
+    #TODO: plot point cloud
 
     # Placeholder model (getting pipeline set up before iterating on model development)
     model = PlaceholderModel()
