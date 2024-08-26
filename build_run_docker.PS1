@@ -3,7 +3,7 @@ $image_name = "waymo-od-image"
 $container_name = "waymo-od-container"
 $volume_local_path = "C:/Users/chris/GitHub/waymo-challenges"
 $volume_container_path = "/workspace/hostfiles"
-$port = 8000
+$port = 8001
 
 # Build docker image
 docker build -t $image_name .

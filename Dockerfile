@@ -22,4 +22,4 @@ RUN source ~/.bashrc && \
 	pip install waymo-open-dataset-tf-2-12-0==1.6.4
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8001
